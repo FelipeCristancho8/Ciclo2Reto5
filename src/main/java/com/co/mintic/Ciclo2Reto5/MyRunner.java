@@ -98,13 +98,16 @@ public class MyRunner implements CommandLineRunner {
             logger.info("Transmision: {}", transmision);
         }
         logger.error("*****************************************************");
-        //crearUsuario("Sparrow", "Johnny ", "Depp");
+        //crearUsuario("Sparrow", "Johnny", "Depp");
         logger.error("*****************************************************");
         //crearPelicula("Guasón", "Pelicula de suspenso basada en el personaje de DC Comics Joker que se remonta a los orígenes del personaje con profundo análisis social.", 2019, "Todd","Phillips");
         //crearSerie("DARK", 3, 26);
         buscarSerie("DARK");
         logger.error("*****************************************************");
         eliminarPelicula("Los Vengadores");
+        logger.error("*****************************************************");
+        //Editar el usuario Johnny Depp cambiar el nombre a Jack Sparrow
+        editarUsuario("Johnny", "Depp", "Jack", "Sparrow");
     }
     
     //punto 1 y 8   
@@ -162,6 +165,18 @@ public class MyRunner implements CommandLineRunner {
         }
     }
     
+    // punto 7
+    private void editarUsuario(String nombreBuscado, String apellidoBuscado,String nNombre, String nApellido){
+        Optional<Usuario> usuario = usuarioRepository.findByNombreAndApellido(nombreBuscado, apellidoBuscado);
+        System.out.println("--------"+ usuario.get().getUsername());
+        if (usuario.isPresent()) {
+            usuario.get().setNombre(nNombre);
+            usuario.get().setApellido(nApellido);
+            usuarioRepository.save(usuario.get());
+            System.out.println("Se actualizó correctamente el usuario "+usuario.get().getUsername());
+        }
+    }
+    
     private Contenido buscarContenido(String titulo){
         Optional<Contenido> contenido = contenidoRepository.findByTitulo(titulo);
         if(contenido.isPresent())
@@ -198,6 +213,5 @@ public class MyRunner implements CommandLineRunner {
         for(Director director : directores){
             logger.info("Director: {}", director);
         }
-    }
-    
+    }    
 }

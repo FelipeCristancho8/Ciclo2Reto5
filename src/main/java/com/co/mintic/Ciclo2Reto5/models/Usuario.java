@@ -21,7 +21,10 @@ public class Usuario {
     
     @Id
     private String username;
+    
+    @Column(name = "nombre")
     private String nombre;
+    @Column(name = "apellido")
     private String apellido;
     private String email;
     private String celular;
