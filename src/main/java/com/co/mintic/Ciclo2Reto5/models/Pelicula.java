@@ -5,26 +5,29 @@
  */
 package com.co.mintic.Ciclo2Reto5.models;
 
+import java.io.Serializable;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 
 @Entity
 @Table(name = "Pelicula")
-public class Pelicula{
+public class Pelicula implements Serializable{
+    
     
     @Id
-    @Column(name = "id_pelicula")
-    //@OneToOne
-    //@JoinColumn(name = "id_pelicula")
-    private long id;    
+    @Column(name="id_pelicula")
+    private long idPelicula;
     
-    private String resumen;    
+   private String resumen;    
     
     private int anio;
     
@@ -32,23 +35,26 @@ public class Pelicula{
     @JoinColumn(name = "dir_id")
     private Director director;
 
-    public Pelicula(long id, String resumen, int anio, Director director) {
-        this.id = id;
+    public Pelicula(long idPelicula, String resumen, int anio, Director director) {
+        this.idPelicula = idPelicula;
         this.resumen = resumen;
         this.anio = anio;
         this.director = director;
     }
-
+    
+    
     public Pelicula() {
     }   
 
-    public long getId() {
-        return id;
+    public long getIdPelicula() {
+        return idPelicula;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setIdPelicula(long idPelicula) {
+        this.idPelicula = idPelicula;
     }
+    
+    
 
     public String getResumen() {
         return resumen;
@@ -74,9 +80,11 @@ public class Pelicula{
         this.director = director;
     }    
     
+    
+    
     @Override
     public String toString() {
-        return "Pelicula{" + "Id= " + id + 
+        return "Pelicula{" + "Id= " + idPelicula + 
                 ", Resumen= " + resumen+
                 ", Año= " + anio +
                 ", Director= "+ director.getNombre() +"}";

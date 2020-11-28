@@ -5,8 +5,10 @@
  */
 package com.co.mintic.Ciclo2Reto5.repositorios;
 
+import com.co.mintic.Ciclo2Reto5.models.Contenido;
 import org.springframework.data.jpa.repository.JpaRepository;
 import com.co.mintic.Ciclo2Reto5.models.Pelicula;
+import java.util.Optional;
 
 /**
  *

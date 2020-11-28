@@ -5,6 +5,7 @@
  */
 package com.co.mintic.Ciclo2Reto5.models;
 
+import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,7 +18,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "contenido")
-public class Contenido {
+public class Contenido implements Serializable {
     
     @Id
     @GeneratedValue
