@@ -122,7 +122,8 @@ public class MyRunner implements CommandLineRunner {
             System.out.println("Lo sentimos el usuario no se encuentra disponible");
         }
     }
-
+    
+    //punto 2
     private void crearPelicula(String titulo, String resumen, int anio, String nombreDirector, String apellidoDirector) {
         crearContenido(titulo);
         long idContenido = buscarPorTitulo(titulo);
@@ -152,6 +153,17 @@ public class MyRunner implements CommandLineRunner {
         }
         System.out.println("La serie que busca no fue encontrada");
     }
+    
+    private Pelicula buscarPelicula(String titulo){
+        Contenido contenido = buscarContenido(titulo);
+        if (contenido != null) {
+            Optional<Pelicula> pelicula = peliculaRepository.findById(contenido.getId());
+            if (pelicula.isPresent()) {
+                return pelicula.get();
+            }
+        }
+        return null;
+    }
 
     //punto 6
     private void eliminarPelicula(String titulo) {
@@ -159,7 +171,7 @@ public class MyRunner implements CommandLineRunner {
         if (contenido != null) {
             Optional<Pelicula> pelicula = peliculaRepository.findById(contenido.getId());
             if (pelicula.isPresent()) {
-                peliculaRepository.deleteById(pelicula.get().getIdPelicula());
+                //peliculaRepository.deleteById(pelicula.get().getIdPelicula());
                 contenidoRepository.deleteById(contenido.getId());
                 System.out.println("Se eliminó exitosamente la pelicula " + titulo);
             }
@@ -191,14 +203,6 @@ public class MyRunner implements CommandLineRunner {
         contenidoRepository.save(contenido);
     }
 
-    private long buscarPorTitulo(String titulo) {
-        Optional<Contenido> contenido = contenidoRepository.findByTitulo(titulo);
-        if (contenido.isPresent()) {
-            return contenido.get().getId();
-        }
-        return -1;
-    }
-
     private Director buscarDirector(String nombre, String apellido) {
         Optional<Director> director = directorRepository.findByNombreAndApellido(nombre, apellido);
         if (director.isPresent()) {
@@ -217,6 +221,40 @@ public class MyRunner implements CommandLineRunner {
         for (Director director : directores) {
             logger.info("Director: {}", director);
         }
+    }
+    
+    
+    //crud con la tabla pelicula-contenido
+    private long buscarPorTitulo(String titulo) {
+        Optional<Contenido> contenido = contenidoRepository.findByTitulo(titulo);
+        if (contenido.isPresent()) {
+            return contenido.get().getId();
+        }
+        return -1;
+    }
+    
+    private void crearPeliculaCrud(String titulo, String resumen, int anio, String nombreDirector, String apellidoDirector) {
+        crearContenido(titulo);
+        long idContenido = buscarPorTitulo(titulo);
+        Director director = buscarDirector(nombreDirector, apellidoDirector);
+        Pelicula pelicula = new Pelicula(idContenido, resumen, anio, director);
+        peliculaRepository.save(pelicula);
+    }
+    
+    private void eliminarPeliculaCrud(String titulo) {
+        Contenido contenido = buscarContenido(titulo);
+        if (contenido != null) {
+            Optional<Pelicula> pelicula = peliculaRepository.findById(contenido.getId());
+            if (pelicula.isPresent()) {
+                //peliculaRepository.deleteById(pelicula.get().getIdPelicula());
+                contenidoRepository.deleteById(contenido.getId());
+                System.out.println("Se eliminó exitosamente la pelicula " + titulo);
+                return;
+            }
+            System.out.println("El contenido que trata de eliminar es una serie");
+            return;
+        }
+        System.out.println("No se encuentra la pelicula "+ titulo);
     }
     
 }

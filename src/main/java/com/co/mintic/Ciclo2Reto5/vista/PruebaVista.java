@@ -7,9 +7,16 @@ package com.co.mintic.Ciclo2Reto5.vista;
 
 import com.co.mintic.Ciclo2Reto5.Ciclo2Reto5Application;
 import com.co.mintic.Ciclo2Reto5.SpringContext;
+import com.co.mintic.Ciclo2Reto5.models.Contenido;
 import com.co.mintic.Ciclo2Reto5.models.Director;
+import com.co.mintic.Ciclo2Reto5.models.Pelicula;
+import com.co.mintic.Ciclo2Reto5.repositorios.ContenidoRepository;
 import com.co.mintic.Ciclo2Reto5.repositorios.DirectorRepository;
+import com.co.mintic.Ciclo2Reto5.repositorios.PeliculaRepository;
+import com.co.mintic.Ciclo2Reto5.repositorios.UsuarioRepository;
+import java.util.List;
 import java.util.Optional;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -20,15 +27,29 @@ public class PruebaVista extends javax.swing.JFrame {
     /**
      * Creates new form PruebaVista
      */
+    PeliculaRepository peliculaRepository;
+    ContenidoRepository contenidoRepository;
     DirectorRepository directorRepository;
-    
+
     public PruebaVista() {
         initComponents();
-        
-        String [] args = {};
+        buttonGroupBusqueda.add(jRBIdF);
+        buttonGroupBusqueda.add(jRBTituloF);
+        buttonGroupBusqueda.add(jRBAnioF);
+        buttonGroupBusqueda.add(jRBDirectorF);
+
+        buttonGroupDelete.add(jRBIdD);
+        buttonGroupDelete.add(jRBTituloD);
+        buttonGroupDelete.add(jRBAnioD);
+        buttonGroupDelete.add(jRBDirectorD);
+
+        String[] args = {};
         Ciclo2Reto5Application.runSpringServer(args);
-        
+
+        peliculaRepository = SpringContext.getBean(PeliculaRepository.class);
+        contenidoRepository = SpringContext.getBean(ContenidoRepository.class);
         directorRepository = SpringContext.getBean(DirectorRepository.class);
+        rellenarCampoPeliculas();
     }
 
     /**
@@ -40,41 +61,345 @@ public class PruebaVista extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jBConsultar = new javax.swing.JButton();
+        buttonGroup1 = new javax.swing.ButtonGroup();
+        buttonGroupBusqueda = new javax.swing.ButtonGroup();
+        buttonGroupDelete = new javax.swing.ButtonGroup();
+        jBLimpiar = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTAResumen = new javax.swing.JTextArea();
+        jTFId = new javax.swing.JTextField();
+        JTFTitulo = new javax.swing.JTextField();
+        JTFAnio = new javax.swing.JTextField();
+        JTFDirector = new javax.swing.JTextField();
+        jRBIdF = new javax.swing.JRadioButton();
+        jRBTituloF = new javax.swing.JRadioButton();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+        jLabel6 = new javax.swing.JLabel();
+        jRBAnioF = new javax.swing.JRadioButton();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jRBIdD = new javax.swing.JRadioButton();
+        jRBTituloD = new javax.swing.JRadioButton();
+        jRBAnioD = new javax.swing.JRadioButton();
+        jRBDirectorF = new javax.swing.JRadioButton();
+        jRBDirectorD = new javax.swing.JRadioButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTAPeliculas = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jBConsultar.setText("Consultar");
-        jBConsultar.addActionListener(new java.awt.event.ActionListener() {
+        jBLimpiar.setText("Limpiar");
+        jBLimpiar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBConsultarActionPerformed(evt);
+                jBLimpiarActionPerformed(evt);
             }
         });
+
+        jLabel1.setText("Titulo");
+
+        jLabel2.setText("ID");
+
+        jLabel3.setText("Resumen");
+
+        jLabel4.setText("Año");
+
+        jLabel5.setText("Director");
+
+        jTAResumen.setColumns(20);
+        jTAResumen.setRows(5);
+        jScrollPane1.setViewportView(jTAResumen);
+
+        jRBIdF.setText("Buscar por Id");
+
+        jRBTituloF.setText("Buscar por titulo");
+
+        jButton1.setText("Guardar");
+        jButton1.setActionCommand("guardar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton2.setText("Buscar");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jButton3.setText("Actualizar");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        jButton4.setText("Eliminar");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
+        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel6.setText("CRUD PELICULAS");
+
+        jRBAnioF.setText("Buscar por año");
+
+        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel7.setText("Búsquedas");
+
+        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel8.setText("Borrados");
+
+        jRBIdD.setText("Borrar por Id");
+        jRBIdD.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRBIdDActionPerformed(evt);
+            }
+        });
+
+        jRBTituloD.setText("Borrar por titulo");
+
+        jRBAnioD.setText("Borrar por año");
+
+        jRBDirectorF.setText("Buscar por director");
+
+        jRBDirectorD.setText("Borrar por director");
+
+        jTAPeliculas.setColumns(20);
+        jTAPeliculas.setRows(5);
+        jScrollPane3.setViewportView(jTAPeliculas);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel6)
+                .addGap(235, 235, 235))
             .addGroup(layout.createSequentialGroup()
-                .addGap(160, 160, 160)
-                .addComponent(jBConsultar)
-                .addContainerGap(161, Short.MAX_VALUE))
+                .addGap(19, 19, 19)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButton1)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton2)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton4))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTFId, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2))
+                        .addGap(31, 31, 31)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(JTFTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4)
+                            .addComponent(JTFAnio, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(34, 34, 34)
+                                .addComponent(jLabel5)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(JTFDirector, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(291, 291, 291)
+                                .addComponent(jBLimpiar)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jRBTituloF)
+                    .addComponent(jRBAnioF)
+                    .addComponent(jRBIdF)
+                    .addComponent(jLabel7)
+                    .addComponent(jRBDirectorF))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jRBDirectorD)
+                    .addComponent(jLabel8)
+                    .addComponent(jRBIdD)
+                    .addComponent(jRBAnioD)
+                    .addComponent(jRBTituloD))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 356, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 616, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(150, Short.MAX_VALUE)
-                .addComponent(jBConsultar)
-                .addGap(127, 127, 127))
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jRBIdD)
+                        .addGap(18, 18, 18)
+                        .addComponent(jRBTituloD)
+                        .addGap(23, 23, 23)
+                        .addComponent(jRBAnioD)
+                        .addGap(29, 29, 29)
+                        .addComponent(jRBDirectorD))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel6)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel5))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jTFId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(JTFTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(JTFAnio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(JTFDirector, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel8))
+                        .addGap(40, 40, 40)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jButton1)
+                                    .addComponent(jButton2)
+                                    .addComponent(jButton3))
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel3)
+                                .addGap(18, 18, 18)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jRBIdF)
+                                    .addComponent(jButton4))
+                                .addGap(18, 18, 18)
+                                .addComponent(jRBTituloF)
+                                .addGap(23, 23, 23)
+                                .addComponent(jRBAnioF)
+                                .addGap(29, 29, 29)
+                                .addComponent(jRBDirectorF)))))
+                .addGap(18, 18, 18)
+                .addComponent(jBLimpiar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(28, 28, 28))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jBConsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBConsultarActionPerformed
-        Director director = buscarDirector("Christopher", "Nolan");
-        System.out.println("Director: "+ director);
-    }//GEN-LAST:event_jBConsultarActionPerformed
+    private void jBLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBLimpiarActionPerformed
+        jTFId.setText("");
+        JTFTitulo.setText("");
+        JTFAnio.setText("");
+        JTFDirector.setText("");
+        jTAResumen.setText("");
+
+        jRBIdD.setSelected(false);
+        jRBAnioD.setSelected(false);
+        jRBDirectorD.setSelected(false);
+        jRBTituloD.setSelected(false);
+
+        jRBIdF.setSelected(false);
+        jRBAnioF.setSelected(false);
+        jRBDirectorF.setSelected(false);
+        jRBTituloF.setSelected(false);
+    }//GEN-LAST:event_jBLimpiarActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        String[] nombres = JTFDirector.getText().split(" ");
+        String titulo = JTFTitulo.getText();
+        String resumen = jTAResumen.getText();
+        int anio = Integer.parseInt(JTFAnio.getText());
+        if(titulo.equals("") || resumen.equals("")){
+            JOptionPane.showMessageDialog(null, "Todos los campos son obligatorios");
+        }else{
+            if(nombres.length != 2){
+             JOptionPane.showMessageDialog(null, "El director debe tener 1 nombre y 1 apellido");
+            }else{
+                String nombreDirector = nombres[0];
+                String apellidoDirector = nombres [1];
+                crearPeliculaCrud(titulo, resumen, anio, nombreDirector, apellidoDirector);
+                JOptionPane.showMessageDialog(null, "Se Creó la pelicula "+titulo);
+            }                
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        if (jRBTituloF.isSelected()) {
+            Pelicula pelicula = buscarPeliculaTitulo(JTFTitulo.getText());
+            if (pelicula != null) {
+                rellenarCampos(pelicula);
+            }
+        } else if (jRBIdF.isSelected()) {
+            Pelicula pelicula = buscarPeliculaId(Long.parseLong(jTFId.getText()));
+            if (pelicula != null) {
+                rellenarCampos(pelicula);
+            }
+        } else if (jRBAnioF.isSelected()) {
+            Pelicula pelicula = buscarPeliculaPorAnio(Integer.parseInt(JTFAnio.getText()));
+            if (pelicula != null) {
+                rellenarCampos(pelicula);
+            }
+        } else if (jRBDirectorF.isSelected()) {
+            String[] nombres = JTFDirector.getText().split(" ");
+            Director director = buscarDirector(nombres[0], nombres[1]);
+            if (director != null) {
+                Pelicula pelicula = buscarPeliculaPorDirector(director);
+                if (pelicula != null) {
+                    rellenarCampos(pelicula);
+                }
+            }else{
+                JOptionPane.showMessageDialog(null, "No se encuentra pelicula del director " + nombres[0] + " " + nombres[1]);
+            }
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jRBIdDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRBIdDActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jRBIdDActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        if(jRBIdD.isSelected()){            
+            eliminarPeliculaId(Long.parseLong(jTFId.getText()));
+        }else if(jRBTituloD.isSelected()){
+            eliminarPeliculaTitulo(JTFTitulo.getText());
+        }else if(jRBAnioD.isSelected()){
+            borrarPorAnio(Integer.parseInt(JTFAnio.getText()));
+        }else if(jRBDirectorD.isSelected()){
+            String[] nombres = JTFDirector.getText().split(" ");
+            Director director = buscarDirector(nombres[0], nombres[1]);
+            if (director != null) {
+                borrarPorDirector(director);
+            }else{
+                JOptionPane.showMessageDialog(null, "No se encuentra pelicula del director " + nombres[0] + " " + nombres[1]);
+            }
+        }        
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        editarPeliculaCrud(Long.parseLong(jTFId.getText()));
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -110,7 +435,86 @@ public class PruebaVista extends javax.swing.JFrame {
             }
         });
     }
+
+    private long buscarPorTitulo(String titulo) {
+        Optional<Contenido> contenido = contenidoRepository.findByTitulo(titulo);
+        if (contenido.isPresent()) {
+            return contenido.get().getId();
+        }
+        return -1;
+    }
+
+    private void crearPeliculaCrud(String titulo, String resumen, int anio, String nombreDirector, String apellidoDirector) {
+        crearContenido(titulo);
+        long idContenido = buscarPorTitulo(titulo);
+        Director director = buscarDirector(nombreDirector, apellidoDirector);
+        Pelicula pelicula = new Pelicula(idContenido, resumen, anio, director);
+        peliculaRepository.save(pelicula);
+    }
     
+    private void editarPeliculaCrud(long id) {
+        Optional<Contenido> contenido = contenidoRepository.findById(id);
+        Optional<Pelicula> pelicula = peliculaRepository.findById(id);
+        if (!contenido.isPresent() && !pelicula.isPresent()) {
+            JOptionPane.showMessageDialog(null, "No existe ninguna pelicula con ese id");
+        }else{
+            Contenido contenidoEditado = contenido.get();
+            contenidoEditado.setTitulo(JTFTitulo.getText());
+            Pelicula PeliculaEditada = pelicula.get();
+            PeliculaEditada.setAnio(Integer.parseInt(JTFAnio.getText()));
+            PeliculaEditada.setResumen(jTAResumen.getText());
+            contenidoRepository.save(contenidoEditado);
+            peliculaRepository.save(PeliculaEditada);
+            JOptionPane.showMessageDialog(null, "Pelicula editada");
+        }
+        /*crearContenido(titulo);
+        long idContenido = buscarPorTitulo(titulo);
+        Director director = buscarDirector(nombreDirector, apellidoDirector);
+        Pelicula pelicula = new Pelicula(idContenido, resumen, anio, director);
+        peliculaRepository.save(pelicula);*/
+    }
+
+    private void eliminarPeliculaTitulo(String titulo) {
+        Contenido contenido = buscarContenido(titulo);
+        if (contenido != null) {
+            Optional<Pelicula> pelicula = peliculaRepository.findById(contenido.getId());
+            if (pelicula.isPresent()) {
+                contenidoRepository.deleteById(contenido.getId());
+                JOptionPane.showMessageDialog(null, "Se eliminó exitosamente la pelicula " + titulo);
+                return;
+            }
+            JOptionPane.showMessageDialog(null, "El contenido que trata de eliminar es una serie");
+            return;
+        }
+        JOptionPane.showMessageDialog(null, "No se encuentra la pelicula "+ titulo);
+    }
+    
+    private void eliminarPeliculaId(long id) {
+        Optional<Pelicula> pelicula = peliculaRepository.findById(id);
+        Optional<Contenido> contenido = contenidoRepository.findById(id);
+        if (contenido.isPresent() && pelicula.isPresent()) {
+            if (contenido.get().getId() == pelicula.get().getIdPelicula()) {
+                contenidoRepository.deleteById(id);
+                JOptionPane.showMessageDialog(null, "Se borró la pelicula con el id "+ id);
+                return;
+            }
+        }
+        JOptionPane.showMessageDialog(null, "No se encuentra la pelicula con el id "+ id);
+    }
+
+    private Contenido buscarContenido(String titulo) {
+        Optional<Contenido> contenido = contenidoRepository.findByTitulo(titulo);
+        if (contenido.isPresent()) {
+            return contenido.get();
+        }
+        return null;
+    }
+
+    private void crearContenido(String titulo) {
+        Contenido contenido = new Contenido(titulo);
+        contenidoRepository.save(contenido);
+    }
+
     private Director buscarDirector(String nombre, String apellido) {
         Optional<Director> director = directorRepository.findByNombreAndApellido(nombre, apellido);
         if (director.isPresent()) {
@@ -119,7 +523,116 @@ public class PruebaVista extends javax.swing.JFrame {
         return null;
     }
 
+    private Pelicula buscarPeliculaTitulo(String titulo) {
+        Contenido contenido = buscarContenido(titulo);
+        if (contenido != null) {
+            Optional<Pelicula> pelicula = peliculaRepository.findById(contenido.getId());
+            if (pelicula.isPresent()) {
+                return pelicula.get();
+            }
+        }
+        JOptionPane.showMessageDialog(null, "No se encuentra pelicula con ese titulo");
+        return null;
+    }
+
+    private Pelicula buscarPeliculaId(long id) {
+        Optional<Pelicula> pelicula = peliculaRepository.findById(id);
+        if (pelicula.isPresent()) {
+            return pelicula.get();
+        }
+        JOptionPane.showMessageDialog(null, "No se encuentra pelicula con ese id");
+        return null;
+    }
+
+    private Pelicula buscarPeliculaPorAnio(int anio) {
+        Optional<List<Pelicula>> pelicula = peliculaRepository.findByAnio(anio);
+        if (pelicula.isPresent()) {
+            return pelicula.get().get(0);
+        }
+        JOptionPane.showMessageDialog(null, "No se encuentra pelicula en ese año");
+        return null;
+    }
+
+    private Pelicula buscarPeliculaPorDirector(Director director) {
+        Optional<List<Pelicula>> pelicula = peliculaRepository.findByDirector(director);
+        if (pelicula.isPresent()) {
+            return pelicula.get().get(0);
+        }
+        JOptionPane.showMessageDialog(null, "No se encuentra pelicula del director " + director.getNombre() + " " + director.getApellido());
+        return null;
+    }
+
+    private void borrarPorAnio(int anio) {
+        Optional<List<Pelicula>> result = peliculaRepository.deleteByAnio(anio);
+        if(result.isPresent()){
+            System.out.println("Se borraron " + result.get().size() + " registros");
+        }        
+    }
+    
+    private void borrarPorDirector(Director director){
+        Optional<List<Pelicula>> peliculas = peliculaRepository.deleteByDirector(director);
+        
+        if (peliculas.isPresent()) {
+            for(Pelicula pelicula : peliculas.get() ){
+                contenidoRepository.deleteById(pelicula.getIdPelicula());
+            }
+            JOptionPane.showMessageDialog(null, "Peliculas eliminadas");
+            return;
+        }
+        JOptionPane.showMessageDialog(null, "No se encuentra pelicula del director " + director.getNombre() + " " + director.getApellido());
+        
+    }
+
+    private void rellenarCampos(Pelicula pelicula) {
+        Optional<Contenido> contenido = contenidoRepository.findById(pelicula.getIdPelicula());
+        if (peliculaRepository.existsById(pelicula.getIdPelicula())) {
+            jTFId.setText(Long.toString(pelicula.getIdPelicula()));
+            JTFDirector.setText(pelicula.getDirector().getNombre() + " " + pelicula.getDirector().getApellido());
+            JTFAnio.setText("" + pelicula.getAnio());
+            jTAResumen.setText(pelicula.getResumen());
+            JTFTitulo.setText(contenido.get().getTitulo());
+        }
+    }
+    
+    private void rellenarCampoPeliculas(){
+        List<Pelicula> peliculas = peliculaRepository.findAll();
+        for (Pelicula pelicula : peliculas) {
+            jTAPeliculas.setText(jTAPeliculas.getText() + pelicula + "\n");
+        }
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jBConsultar;
+    private javax.swing.JTextField JTFAnio;
+    private javax.swing.JTextField JTFDirector;
+    private javax.swing.JTextField JTFTitulo;
+    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.ButtonGroup buttonGroupBusqueda;
+    private javax.swing.ButtonGroup buttonGroupDelete;
+    private javax.swing.JButton jBLimpiar;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JRadioButton jRBAnioD;
+    private javax.swing.JRadioButton jRBAnioF;
+    private javax.swing.JRadioButton jRBDirectorD;
+    private javax.swing.JRadioButton jRBDirectorF;
+    private javax.swing.JRadioButton jRBIdD;
+    private javax.swing.JRadioButton jRBIdF;
+    private javax.swing.JRadioButton jRBTituloD;
+    private javax.swing.JRadioButton jRBTituloF;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JTextArea jTAPeliculas;
+    private javax.swing.JTextArea jTAResumen;
+    private javax.swing.JTextField jTFId;
     // End of variables declaration//GEN-END:variables
 }
